@@ -69,7 +69,7 @@ export function LiveTranscriptionSidekickContent(
     };
 
     const textContent = captions.caption_history.map((c) => {
-      const timestamp = formatDate(c.createdAt);
+      const timestamp = formatDate(c.createdAt).toLocaleString("pt-BR");
       return `${c.user.name} (${timestamp}): ${c.captionText}`;
     }).join('\n');
 

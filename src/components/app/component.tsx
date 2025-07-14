@@ -51,8 +51,10 @@ export function LiveTranscriptionPlugin(
     GET_CAPTION_ACTIVE_LOCALES,
   );
 
+  const { data: currentUser } = pluginApi.useCurrentUser();
+
   useEffect(() => {
-    if (captionActiveLocalesResult && intl) {
+    if (captionActiveLocalesResult && intl && currentUser?.role == 'MODERATOR') {
       const sidekickPanelsList = captionActiveLocalesResult.caption_activeLocales.map(
         (activeCaptionLocale) => new GenericContentSidekickArea({
           name: intl.formatMessage(intlMessages.sidekickMenuTitle, {
@@ -76,7 +78,10 @@ export function LiveTranscriptionPlugin(
       );
       pluginApi.setGenericContentItems([...sidekickPanelsList]);
     }
-  }, [captionActiveLocalesResult, intl]);
+    else if (currentUser?.role != 'MODERATOR') {
+      pluginApi.setGenericContentItems([]);
+    }
+  }, [captionActiveLocalesResult, intl, currentUser?.role]);
 
   return null;
 }
